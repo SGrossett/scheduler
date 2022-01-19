@@ -8,6 +8,8 @@ import "index.scss";
 import Button from "components/Button";
 import DayListItem from "components/DayListItem";
 import DayList from "components/DayList";
+import Appointment from "components/Appointment/index.js"
+import Header from "components/Appointment/Header"
 
 storiesOf("Button", module)
   .addParameters({
@@ -129,12 +131,27 @@ storiesOf("DayListItem", module)
     .add("Selected", () => (
       <InterviewerList
         interviewers={interviewers}
-        interviewer={3}
+        value={3}
       />
     ))
     .add("Clickable", () => (
       <InterviewerList
         interviewers={interviewers}
-        setInterviewer={action("setInterviewer")}
+        onChange={action("setInterviewer")}
       />
     ));
+
+  storiesOf("Appointment", module)
+    .addParameters({
+      backgrounds: [{ name: "white", value: "#fff", default: true }]
+    })
+    .add("Appointment", () => <Appointment />)
+    .add("Appointment with Time", () => <Appointment time="12pm"/>);
+  
+  storiesOf("Appointment", module)
+  .addParameters({
+    backgrounds: [{ name: "white", value: "#fff", default: true }]
+  })
+  .add("Appointment", () => <Appointment />)
+  .add("Appointment with Time", () => <Appointment time="12pm" />)
+  .add("Header", () => <Header time="12pm" />);
