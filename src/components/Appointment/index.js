@@ -14,13 +14,22 @@ export default function Appointment(props) {
 
   const { mode, transition, back } = usesVisualMode(interview ? SHOW : EMPTY);
 
-  const formatAppointments = () => {
-    return time ? `Appointment at ${time}` : `No Appointments`;
-  }
   return (
     <article className="appointment">
       <Header time={time} />
-      {interview ? <Show student={interview.student} interviewer={interview.interviewer} /> : <Empty />}
+      {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
+      {mode === SHOW && (
+        <Show
+          student={interview.student}
+          interviewer={interview.interviewer}
+        />
+      )}
+      {mode === CREATE && (
+        <Form
+          interviewers={[]}
+          onCancel={() => back()}
+        />
+      )}
     </article>
   );
 }
