@@ -4,6 +4,7 @@ import axios from "axios";
 import DayList from "./DayList";
 import Appointment from "./Appointment";
 import { getAppointmentsForDay, getInterview } from "helpers/selectors";
+import useVisualMode from "hooks/useVisualMode";
 import "components/Application.scss";
 
 export default function Application(props) {
@@ -13,6 +14,12 @@ export default function Application(props) {
     appointments: {},
     interviewers: {}
   });
+
+  const EMPTY = "EMPTY";
+  const SHOW = "SHOW";
+  const CREATE = "CREATE";
+
+  const { mode, transition, back } = usesVisualMode(interview ? SHOW : EMPTY);
 
   const setDay = day => setState({ ...state, day });
   
