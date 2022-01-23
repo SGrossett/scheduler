@@ -1,15 +1,17 @@
+
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import DayList from "./DayList";
 import Appointment from "./Appointment";
-import { getAppointmentsForDay } from "helpers/selectors";
+import { getAppointmentsForDay, getInterview } from "helpers/selectors";
 import "components/Application.scss";
 
 export default function Application(props) {
   const [state, setState] = useState({
     day: "Monday",
     days: [],
-    appointments: {}
+    appointments: {},
+    interviewers: {}
   });
 
   const setDay = day => setState({ ...state, day });
@@ -25,17 +27,25 @@ export default function Application(props) {
       setState(prev => ({
         ...prev, 
         days: all[0].data, 
-        appointments: all[1].data 
+        appointments: all[1].data,
+        interviewers: all[2].data
       }));
     });
   }, []);
 
   const appointmentList = dailyAppointments.map((appointment) => {
+    const interview = getInterview(state, appointment.interview);
     return (
-      <Appointment key={appointment.id} {...appointment} />
+      <Appointment
+        key={appointment.id}
+        id={appointment.id}
+        time={appointment.time}
+        interview={interview}
+      />
     );
   });
 
+  console.log("state", state)
   return (
     <main className="layout">
       <section className="sidebar">
