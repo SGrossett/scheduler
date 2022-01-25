@@ -25,8 +25,8 @@ export default function Appointment(props) {
     };
 
     bookInterview(id, interview)
-    transition(SHOW);
-    
+    .then( () => transition(SHOW))
+    .catch( (error) => console.log("Error:", error) );
   }
 
   return (
