@@ -8,16 +8,17 @@ import useVisualMode from "hooks/useVisualMode";
 import "../Appointment/styles.scss"
 
 export default function Appointment(props) {
-  const { time, interview, id, bookInterview, interviewers } = props;
+  const { time, interview, id, bookInterview, interviewers, cancelInterview } = props;
   
   const EMPTY = "EMPTY";
   const SHOW = "SHOW";
   const CREATE = "CREATE";
   const SAVING = "SAVING";
+  const DELETING = "DELETING";
 
   const { mode, transition, back } = useVisualMode(interview ? SHOW : EMPTY);
 
-  function save(name, interviewer) {
+  const save = (name, interviewer) => {
     transition(SAVING);
     const interview = {
       student: name,
@@ -27,15 +28,30 @@ export default function Appointment(props) {
     bookInterview(id, interview)
     .then( () => transition(SHOW))
     .catch( (error) => console.log("Error:", error) );
-  }
+  };
+
+  const deleteAppointment = () => {
+    transition(DELETING);
+
+    cancelInterview(id)
+    .then( () => transition(EMPTY) )
+    .catch( (error) => console.log("Error:", error) );
+  };
 
   return (
     <article className="appointment">
       <Header time={time} />
       {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
-      {mode === SHOW && <Show student={interview.student} interviewer={interview.interviewer} />}
+      {mode === SHOW && (
+        <Show 
+          id={id} 
+          student={interview.student}
+          interviewer={interview.interviewer}
+          onDelete={deleteAppointment}
+        />)}
       {mode === CREATE && <Form interviewers={interviewers} onCancel={() => back()} onSave={save} />}
-      {mode === SAVING && <Status />}
+      {mode === SAVING && <Status message="Saving" />}
+      {mode === DELETING && <Status message="Deleting" />}
     </article>
   );
 }
