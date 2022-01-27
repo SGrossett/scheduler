@@ -44,7 +44,10 @@ export default function Appointment(props) {
 
     cancelInterview(id)
     .then( () => transition(EMPTY) )
-    .catch( (error) => transition(ERROR_DELETE, true) );
+    .catch( (error) => {
+      console.log("caught delete error");
+      transition(ERROR_DELETE, true) 
+    });
   };
 
   const errorMsg = "Could not cancel appointment";
@@ -85,12 +88,12 @@ export default function Appointment(props) {
         />)}
       {mode === ERROR_SAVE && (
         <Error 
-          message={errorMsg} 
+          message="Could not save appointment" 
           onclose={() => back()}
         />)}
       {mode === ERROR_DELETE && (
         <Error 
-          message={errorMsg} 
+          message="Could not cancel appointment" 
           onclose={() => back()}
         />)}
 
