@@ -9,7 +9,7 @@ export default function useApplicationData() {
     interviewers: {}
   });
   
-  const setDay = day => setState({ ...state, day });
+  const setDay = (day) => setState({ ...state, day });
   
     useEffect(() => {
     Promise.all([
@@ -25,8 +25,23 @@ export default function useApplicationData() {
       }));
     });
   }, []);
-  
+
+  const updateSpots = (add, remove) => { 
+    const updateCount = state.days.find(day => day.name === state.day);
+    const days = [...state.days];
+
+    if (remove) {
+      updateCount.spots++;
+    } else if (add) {
+      updateCount.spots--;
+    }
+
+    days[updateCount.id - 1] = updateCount;
+    return days;
+  }
+
   const bookInterview = (id, interview) => {
+    const add = !(state.appointments[id].interview);
     const appointment = {
       ...state.appointments[id],
       interview: { ...interview }
@@ -38,8 +53,11 @@ export default function useApplicationData() {
     };
     
     return axios.put(`api/appointments/${id}`, appointment)
-    .then( () => setState({ ...state, appointments }) )
-    .catch( (error) => console.log("Error:", error) );
+    .then( () => setState({ ...state, appointments, days: updateSpots(add) }))
+    .catch( (error) => {
+      console.log("book error:", error);
+      throw error;
+    });
   }
   
   const cancelInterview = (id) => {
@@ -49,14 +67,17 @@ export default function useApplicationData() {
     };
   
     const appointments = {
-      ...state.appointments[id],
+      ...state.appointments,
       [id]: appointment
     };
   
     return axios.delete(`api/appointments/${id}`, appointment)
-    .then( () => setState( ...state, appointments ))
-    .catch( (error) => console.log("Error:", error) );
+    .then( () => setState({ ...state, appointments, days: updateSpots(null, true) }))
+    .catch( (error) => {
+      console.log("delete errors:", error);
+      throw error;
+    });
   }
-  
-  return { state, setDay, bookInterview, cancelInterview };
+
+  return { state, setDay, bookInterview, cancelInterview, updateSpots };
 }
