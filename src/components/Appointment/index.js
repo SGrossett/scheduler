@@ -45,7 +45,6 @@ export default function Appointment(props) {
     cancelInterview(id)
     .then( () => transition(EMPTY) )
     .catch( (error) => {
-      console.log("caught delete error");
       transition(ERROR_DELETE, true) 
     });
   };
