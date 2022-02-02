@@ -14,8 +14,14 @@ ___
 
 
 ## Setup
+1. Fork this respository, then clone the repo to your local working directory.
+2. Fork the [scheduler-api repository](https://github.com/SGrossett/scheduler-api) that contains the database and clone it to your local host as well.
+3. From the root directory of the project on your host machine (not Vagrant), execute `npm install` to install the dependencies
+4. Run npm start to run the webpack development server (the process may take some time, so be patient)
+5. Visit http://localhost:8000 in the browser
+6. Enjoy the app!
 
-Install dependencies with `npm install`.
+___
 
 ## Running Webpack Development Server
 
