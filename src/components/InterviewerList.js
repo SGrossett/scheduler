@@ -5,7 +5,6 @@ import 'components/InterviewerList.scss';
 
 export default function InterviewList(props) {
   const { interviewers, onChange, value } = props;
-
   const interviewList = interviewers.map((interviewer) => (
     <InterviewerListItem
       key={interviewer.id}
@@ -26,7 +25,6 @@ export default function InterviewList(props) {
 }
 
 InterviewList.propTypes = {
-  value: PropTypes.number,
   onChange: PropTypes.func.isRequired,
   interviewers: PropTypes.array.isRequired,
 };

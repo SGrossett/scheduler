@@ -48,7 +48,7 @@ export default function Form(props) {
           <section className="appointment__validation">{error}</section>
         </form>
         <InterviewerList
-          value={interviewer ? interviewer.id : null}
+          value={interviewer}
           interviewers={interviewers}
           onChange={setInterviewer}
         />
