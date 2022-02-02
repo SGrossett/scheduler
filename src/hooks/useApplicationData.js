@@ -10,7 +10,8 @@ export default function useApplicationData() {
   });
 
   const setDay = (day) => setState({ ...state, day });
-
+  
+  // Make api requests when appointments are updated then reolve promise and update state
   useEffect(() => {
     Promise.all([
       axios.get('/api/days'),
@@ -26,22 +27,25 @@ export default function useApplicationData() {
     });
   }, []);
 
+  // Function to update the spots available
   const updateSpots = (add, remove) => {
     const updateCount = state.days.find((day) => day.name === state.day);
     const days = [...state.days];
 
-    if (remove) {
+    if (remove) { // Add a spot if appointment is cancelled
       updateCount.spots++;
-    } else if (add) {
+    } else if (add) { // Remove a spot if appointment is added
       updateCount.spots--;
     }
 
-    days[updateCount.id - 1] = updateCount;
+    days[updateCount.id - 1] = updateCount; // Apply change to object
     return days;
   };
 
+  // Sends a book appointment request to an api and updates state
   const bookInterview = (id, interview) => {
     const add = !state.appointments[id].interview;
+
     const appointment = {
       ...state.appointments[id],
       interview: { ...interview },
@@ -61,6 +65,7 @@ export default function useApplicationData() {
       });
   };
 
+  // Sends a cancel request to the app and updates the state with null interview
   const cancelInterview = (id) => {
     const appointment = {
       ...state.appointments[id],
