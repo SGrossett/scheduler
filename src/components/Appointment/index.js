@@ -49,9 +49,7 @@ export default function Appointment(props) {
       });
   };
 
-  const errorMsg = 'Could not cancel appointment';
-
-  return (
+    return (
     <article className="appointment">
       <Header time={time} />
       {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
@@ -69,31 +67,31 @@ export default function Appointment(props) {
       {mode === CREATE && (
         <Form
           interviewers={interviewers}
-          onCancel={() => back()}
+          onCancel={back}
           onSave={save}
         />
       )}
       {mode === CONFIRM && (
         <Confirm
           message="Are you sure you would like to delete?"
-          onCancel={() => back()}
+          onCancel={back}
           onConfirm={deleteAppointment}
         />
       )}
       {mode === EDIT && (
         <Form
           student={interview.student}
-          interviewer={interview.interviewer}
+          interviewer={interview.interviewer.id}
           interviewers={interviewers}
           onCancel={() => transition(SHOW)}
           onSave={save}
         />
       )}
       {mode === ERROR_SAVE && (
-        <Error message="Could not save appointment" onclose={() => back()} />
+        <Error message="Could not save appointment" onClose={() => transition(SHOW)} />
       )}
       {mode === ERROR_DELETE && (
-        <Error message="Could not cancel appointment" onclose={() => back()} />
+        <Error message="Could not cancel appointment" onClose={() => transition(SHOW)} />
       )}
     </article>
   );
